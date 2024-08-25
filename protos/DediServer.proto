@@ -1,0 +1,434 @@
+syntax = "proto3";
+
+package DC.Packet;
+
+option java_package = "com.packets.dediServer";
+option java_outer_classname = "dediServer";
+option java_multiple_files = false;
+
+import "_Item.proto";
+import "_Character.proto";
+
+message SGameQuestContentInfo {
+  string contentId = 2;
+  int32 contentValue = 3;
+}
+
+message SGameQuestInfo {
+  string questId = 1;
+  repeated .DC.Packet.SGameQuestContentInfo infos = 2;
+}
+
+message S2C_GameEnterUser_Json {
+  string restUrl = 1;
+  bytes nickName = 2;
+  bytes streamingNickName = 3;
+  string characterClass = 4;
+  string characterId = 5;
+  uint32 gender = 6;
+  uint32 level = 7;
+  string partyId = 8;
+  int32 karmaRating = 9;
+}
+
+message GameExitAdvPoint {
+  int32 advPointType = 1;
+  int32 advPoint = 2;
+}
+
+message GameExitExpPoint {
+  uint32 expPointType = 1;
+  uint32 expPoint = 2;
+}
+
+message Killlog {
+  string instigatorAccountId = 1;
+  string instigatorName = 2;
+  string effectCauserName = 3;
+  uint32 hitBoxType = 4;
+  int32 advPoint = 5;
+}
+
+message MonsterKillLog {
+  string monsterName = 1;
+  uint32 monsterKillCount = 2;
+}
+
+message C2S_GameExitUser_POST {
+  enum ESCAPE {
+    NONE = 0;
+    SUCCESS = 1;
+    FAIL = 2;
+  }
+
+  uint32 escape = 1;
+  string accountId = 2;
+  string characterId = 3;
+  uint64 gameId = 4;
+  repeated .DC.Packet.SItem items = 5;
+  repeated .DC.Packet.SItem guaranteedItems = 6;
+  string characterClass = 7;
+  uint32 killCount = 8;
+  repeated .DC.Packet.GameExitAdvPoint advPoints = 9;
+  string escapeMapName = 10;
+  string reason = 11;
+  repeated .DC.Packet.GameExitExpPoint expPoints = 12;
+  repeated .DC.Packet.Killlog killLogData = 13;
+  repeated .DC.Packet.MonsterKillLog monsterKillLogs = 14;
+  uint32 gameType = 15;
+  uint32 needBlock = 16;
+  uint32 needHWBlock = 17;
+}
+
+message C2S_GameEnterUser_Post {
+  string accountId = 1;
+  string characterId = 2;
+  uint64 gameId = 3;
+  uint32 isSuccess = 4;
+}
+
+message S2C_GameStartServer_Json {
+  enum MATCH_MAKE {
+    NONE = 0;
+    NORMAL = 1;
+    FLOOR = 2;
+  }
+
+  string restUrl = 1;
+  uint64 gameId = 2;
+  uint32 maxGameUser = 3;
+  uint32 waitTimeSec = 4;
+  repeated string dungeonMapIds = 5;
+  uint32 gameHackPolicy = 6;
+  uint32 validPlayerMeleeAttackRange = 7;
+  uint32 gameType = 8;
+  uint32 shippingLogOnOffPolicy = 9;
+  uint32 shippingLogLevelPolicy = 10;
+  uint32 gmOnOffPolicy = 11;
+  uint32 shippingLogIronShieldOnOffPolicy = 12;
+  uint32 shippingLogIronShieldLevelPolicy = 13;
+  uint32 currentFloor = 16;
+  uint32 floorMatchmakingOnOff = 17;
+  uint32 matchmakingType = 18;
+  string region = 19;
+  string fleetId = 20;
+  string dungeonIdTag = 21;
+  string cloudScanUrl = 22;
+  string serverLocate = 23;
+  string matchingQueueType = 24;
+}
+
+message C2S_GameEndServer_POST {
+  repeated .DC.Packet.GameEndUserInfo users = 1;
+  uint64 gameId = 2;
+  repeated .DC.Packet.Circle circles = 3;
+}
+
+message GameEndUserInfo {
+  string accountId = 1;
+  uint32 kill = 2;
+  uint32 death = 3;
+}
+
+message C2S_GameStart_POST {
+  uint64 gameId = 1;
+  repeated string mapNames = 2;
+}
+
+message C2S_GameCharacterInfo_Get {
+  uint64 gameId = 1;
+  string accountId = 2;
+  string characterId = 3;
+  uint32 gameType = 4;
+}
+
+message SRankGameUserInfo {
+  string rankId = 1;
+  uint32 currentPoint = 2;
+  uint32 needPoint = 3;
+  uint32 currentTotalPoint = 4;
+}
+
+message S2C_GameCharacterInfo_Json {
+  uint64 gameId = 1;
+  string accountId = 2;
+  string characterId = 3;
+  repeated .DC.Packet.SItem items = 4;
+  repeated .DC.Packet.SPerk perks = 5;
+  repeated .DC.Packet.SSkill skills = 6;
+  repeated .DC.Packet.SSpell spells = 7;
+  repeated string characterSkinIds = 8;
+  repeated string itemSkinIds = 9;
+  repeated .DC.Packet.SEMOTE emotes = 10;
+  repeated string actionIds = 11;
+  repeated .DC.Packet.SMusic musics = 12;
+  repeated .DC.Packet.SShapeShift shapeShifts = 13;
+  repeated .DC.Packet.SGameQuestInfo quests = 14;
+  .DC.Packet.SRankGameUserInfo rankInfo = 16;
+  uint32 entranceFee = 17;
+  string seasonId = 18;
+  uint32 isSeason = 19;
+  repeated string armorSkinIds = 20;
+  int32 totalPlayTimeSec = 21;
+  int32 level = 22;
+  int32 fame = 23;
+  int32 isBlackList = 24;
+  int32 gearScore = 25;
+}
+
+message C2S_GameAliveCheck_GET {
+  uint64 gameId = 1;
+}
+
+message AliveDataInfo {
+  string Id = 1;
+  repeated string Us = 2;
+}
+
+message C2S_AliveAppendData_GET {
+  string Gs = 1;
+  repeated .DC.Packet.AliveDataInfo infos = 2;
+}
+
+message C2S_GameInterrupt_POST {
+  uint64 gameId = 1;
+}
+
+message C2S_UserReport_POST {
+  uint64 gameId = 1;
+  string reportAccountId = 2;
+  repeated uint32 category = 3;
+  string targetAccountId = 4;
+  .DC.Packet.SACCOUNT_NICKNAME targetNickName = 5;
+  string targetCharacterId = 6;
+  string reportContent = 7;
+}
+
+message S2C_UserReport_POST_Response {
+  string reportAccountId = 1;
+  string targetAccountId = 2;
+  string reportKey = 3;
+  uint32 category = 4;
+}
+
+message Location {
+  int32 x = 1;
+  int32 y = 2;
+  int32 z = 3;
+}
+
+message Circle {
+  .DC.Packet.Location pos = 1;
+  float radius = 2;
+}
+
+message NewItemLog {
+  .DC.Packet.Location pos = 1;
+  string itemId = 2;
+}
+
+message GameResultInfo {
+  string accountId = 1;
+  string characterId = 2;
+  uint64 gameId = 3;
+  string characterClass = 4;
+  uint32 killCount = 5;
+  repeated .DC.Packet.GameExitAdvPoint advPoints = 6;
+  string escapeMapName = 7;
+  string reason = 8;
+  repeated .DC.Packet.GameExitExpPoint expPoints = 9;
+  repeated .DC.Packet.Killlog killLogData = 10;
+  repeated .DC.Packet.MonsterKillLog monsterKillLogs = 11;
+  uint32 gameType = 12;
+  uint32 needBlock = 13;
+  uint32 needHWBlock = 14;
+  uint32 blockTime_min = 15;
+  int32 addTriumphExpValue = 16;
+  repeated .DC.Packet.Location locations = 17;
+  repeated .DC.Packet.NewItemLog newItemLogs = 18;
+  repeated .DC.Packet.SGameQuestInfo quests = 19;
+  repeated .DC.Packet.SGameStat gameStats = 20;
+  string seasonId = 21;
+  uint32 isSeason = 22;
+  string dungeonIdTag = 23;
+  uint32 isBasecamp = 24;
+  string userPcLanguageCode = 25;
+}
+
+message C2S_GameEscapeUser_POST {
+  .DC.Packet.GameResultInfo resultInfo = 1;
+  repeated .DC.Packet.SItem items = 2;
+  string secretId = 3;
+}
+
+message C2S_GameExitUser_V2_POST {
+  .DC.Packet.GameResultInfo resultInfo = 1;
+}
+
+message C2S_GameExitEscapedUser_POST {
+  string accountId = 1;
+  string characterId = 2;
+  uint64 gameId = 3;
+}
+
+message SSkill_Floor {
+  .DC.Packet.SSkill skill = 1;
+  int32 count = 2;
+}
+
+message SSpell_Floor {
+  .DC.Packet.SSpell spell = 1;
+  int32 count = 2;
+}
+
+message SMusic_Floor {
+  .DC.Packet.SMusic music = 1;
+  int32 count = 2;
+}
+
+message SShapeShift_Floor {
+  .DC.Packet.SShapeShift shapeShift = 1;
+  int32 count = 2;
+}
+
+message FloorMatchMaking_CharacterInfo {
+  string accountId = 1;
+  string characterId = 2;
+  repeated .DC.Packet.SDownItem downItems = 3;
+  repeated .DC.Packet.SPerk perks = 4;
+  repeated .DC.Packet.SSkill_Floor skills = 5;
+  repeated .DC.Packet.SSpell_Floor spells = 6;
+  repeated .DC.Packet.SMusic_Floor musics = 7;
+  repeated .DC.Packet.SShapeShift_Floor shapeShifts = 8;
+  repeated string characterSkinIds = 9;
+  repeated string itemSkinIds = 10;
+  repeated .DC.Packet.SEMOTE emotes = 11;
+  int32 hp = 12;
+}
+
+message C2S_Prepare_FloorMatchMaking {
+  .DC.Packet.FloorMatchMaking_CharacterInfo info = 1;
+  .DC.Packet.GameResultInfo resultInfo = 2;
+}
+
+message S2C_GamePolicy_GET {
+  repeated string appHash = 1;
+  string policyJson = 2;
+}
+
+message S2C_GameFileDB_GET {
+  string fileDBJson = 1;
+}
+
+message C2S_GameSpectator_Check_POST {
+  string accountId = 1;
+  string token = 2;
+}
+
+message S2C_GameSpectator_Check_Json {
+  uint32 isSuccess = 1;
+}
+
+message GameDown_UserPartyInfo {
+  string accountId = 1;
+  .DC.Packet.SACCOUNT_NICKNAME nickname = 2;
+  string characterClass = 3;
+  uint32 gender = 4;
+  uint32 level = 5;
+}
+
+message S2C_GameDown_UserParty_GET {
+  repeated .DC.Packet.GameDown_UserPartyInfo partyMember = 1;
+}
+
+message C2S_GameReady_POST {
+  uint64 gameId = 1;
+}
+
+message GameFloorMatchMaking_UserInfo {
+  string accountId = 1;
+  string characterId = 2;
+  string partyId = 3;
+}
+
+message C2S_FloorMatchMaking_POST {
+  repeated .DC.Packet.GameFloorMatchMaking_UserInfo infos = 1;
+  uint64 gameId = 2;
+  uint32 currentFloor = 3;
+  string dungeonId = 4;
+}
+
+message GameFloorMatchMaking_UserInfoResponse {
+  string accountId = 1;
+  string characterId = 2;
+  string ip = 3;
+  int32 port = 4;
+  string sessionId = 5;
+}
+
+message S2C_FloorMatchMaking_POST_Response {
+  repeated .DC.Packet.GameFloorMatchMaking_UserInfoResponse infos = 1;
+}
+
+message C2S_IronShield_Report_POST {
+  uint32 callbackType = 1;
+  string reportId = 2;
+  repeated string hIds = 3;
+  repeated uint32 blob = 4;
+  string accountId = 5;
+  string characterId = 6;
+  string originNickname = 7;
+  string reason = 8;
+  uint32 needBlock = 9;
+  uint32 needHWBlock = 10;
+  uint32 blockTime_min = 11;
+  uint32 banType = 12;
+  int32 blobType = 13;
+  string blobNameTag = 14;
+}
+
+message C2S_BanCheck_Hardware_POST {
+  string accountId = 1;
+  repeated string hIds = 2;
+}
+
+message S2C_BanCheck_Hardware_POST_Response {
+  string accountId = 1;
+  uint32 isBan = 2;
+  repeated string banHIds = 3;
+  repeated string loginHIds = 4;
+}
+
+message C2S_Dirty_Item_POST {
+  string accountId = 1;
+  string characterId = 2;
+  uint64 gameId = 3;
+  repeated .DC.Packet.SItem upsertItems = 4;
+  repeated uint64 deleteItemUniqueIds = 5;
+}
+
+message C2S_IronShield_Isolation_POST {
+  string accountId = 1;
+  int32 isolationHours = 2;
+}
+
+message C2S_Arena_Result_POST {
+  .DC.Packet.GameResultInfo resultInfo = 1;
+  repeated .DC.Packet.SItem items = 2;
+  string secretId = 3;
+}
+
+message C2S_Arena_Exit_POST {
+  string accountId = 1;
+  string characterId = 2;
+  uint64 gameId = 3;
+  string secretId = 4;
+}
+
+message C2S_Game_Finalize_Session_POST {
+  uint64 gameId = 1;
+  string accountId = 2;
+  string characterId = 3;
+  repeated .DC.Packet.SItem recoveryItems = 4;
+}
+
