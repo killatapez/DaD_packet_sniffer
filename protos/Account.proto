@@ -1,0 +1,162 @@
+syntax = "proto3";
+
+package DC.Packet;
+
+option java_package = "com.packets.account";
+option java_outer_classname = "account";
+option java_multiple_files = false;
+
+import "_Item.proto";
+import "_Character.proto";
+
+message SLOGIN_ACCOUNT_INFO {
+  string AccountID = 1;
+}
+
+message SLOGIN_CHARACTER_INFO {
+  string characterId = 1;
+  .DC.Packet.SACCOUNT_NICKNAME nickName = 2;
+  string characterClass = 3;
+  uint64 createAt = 4;
+  uint32 gender = 5;
+  uint32 level = 6;
+  uint64 lastloginDate = 7;
+  repeated .DC.Packet.SItem equipItemList = 8;
+  repeated string equipCharacterSkinList = 9;
+  repeated string equipItemSkinList = 10;
+  repeated string equipArmorSkinList = 11;
+}
+
+message SC2S_ACCOUNT_LOGIN_REQ {
+  string loginId = 1;
+  string password = 2;
+  string ipAddress = 3;
+  uint32 steamBuildId = 4;
+  repeated string hwIds = 5;
+  string macAddress = 6;
+  uint32 platformId = 7;
+  string buildVersion = 8;
+}
+
+message SS2C_ACCOUNT_LOGIN_RES {
+  enum RESULT {
+    RESULT_NONE = 0;
+    SUCCESS = 1;
+    SUCCESS_FIRST = 2;
+    FAIL_PASSWORD = 3;
+    FAIL_CONNECT = 4;
+    FAIL_SHORT_ID_OR_PASSWORD = 5;
+    FAIL_OVERFLOW_ID_OR_PASSWORD = 6;
+    FAIL_IP_PORT = 7;
+    FAIL_OVERLAP_LOGIN = 8;
+    FAIL_STEAM_BUILD_ID = 11;
+    FAIL_BAN = 12;
+    FAIL_LOGIN_BAN_HARDWARE = 16;
+    FAIL_UNDER_MAINTENANCE = 17;
+    FAIL_BUILD_VERSION_ID = 41;
+    SUCCESS_AGREE_CHECK_RES = 51;
+  }
+
+  uint32 Result = 1;
+  .DC.Packet.SLOGIN_ACCOUNT_INFO AccountInfo = 2;
+  uint32 isReconnect = 3;
+  string address = 4;
+  string sessionId = 5;
+  string accountId = 6;
+  uint32 serverLocation = 7;
+  string secretToken = 8;
+  uint64 banTime_begin_ms = 9;
+  uint64 banTime_end_ms = 10;
+  string upgradeDate = 11;
+  string upgradeTime = 12;
+  string banReason = 13;
+  string latencyToken = 14;
+  uint64 totalPlaytime = 15;
+  int32 userLoginInfo = 16;
+  int32 usePlatformLink = 17;
+  .DC.Packet.ACCOUNT_REDIRECTION_INFO redirectionInfo = 18;
+}
+
+message SC2S_ACCOUNT_CHARACTER_CREATE_REQ {
+  string nickName = 1;
+  string characterClass = 2;
+  uint32 gender = 3;
+}
+
+message SS2C_ACCOUNT_CHARACTER_CREATE_RES {
+  uint32 result = 1;
+}
+
+message SC2S_ACCOUNT_CHARACTER_LIST_REQ {
+  uint32 pageIndex = 1;
+  uint32 pageCapacity = 2;
+}
+
+message SS2C_ACCOUNT_CHARACTER_LIST_RES {
+  uint32 totalCharacterCount = 1;
+  uint32 pageIndex = 2;
+  repeated .DC.Packet.SLOGIN_CHARACTER_INFO characterList = 3;
+}
+
+message SC2S_ACCOUNT_CHARACTER_DELETE_REQ {
+  string characterId = 1;
+}
+
+message SS2C_ACCOUNT_CHARACTER_DELETE_RES {
+  uint32 result = 1;
+  uint32 usePlatformLink = 2;
+}
+
+message SC2S_LOBBY_ENTER_REQ {
+  string characterId = 1;
+}
+
+message SS2C_LOBBY_ENTER_RES {
+  uint32 result = 1;
+  string accountId = 2;
+}
+
+message SC2S_ACCOUNT_AGREE_ANSWER_REQ {
+  uint32 isAgree = 1;
+}
+
+message SS2C_ACCOUNT_AGREE_ANSWER_RES {
+  uint32 result = 1;
+}
+
+message SACCOUNT_CHARACTER_CLASS_INFO {
+  string characterClassId = 1;
+  string shopId = 2;
+  uint32 isOwned = 3;
+}
+
+message SS2C_ACCOUNT_CHARACTER_CLASS_LIST_NOT {
+  repeated .DC.Packet.SACCOUNT_CHARACTER_CLASS_INFO characterClassList = 1;
+}
+
+message SC2S_USER_HW_INFO_REQ {
+  string os = 1;
+  string cpu = 2;
+  string gpu = 3;
+  string gpuVersion = 4;
+  string memory = 5;
+  string storage = 6;
+  string directX = 7;
+  string osVersion = 8;
+}
+
+message SS2C_USER_HW_INFO_RES {
+}
+
+message ACCOUNT_REDIRECTION_INFO {
+  string generalReportUrl = 1;
+  string banAppealUrl = 2;
+  string knightLinkUrl = 3;
+  string supportFaqUrl = 4;
+  string homeUrl = 5;
+  string newsUrl = 6;
+  string suggestionUrl = 7;
+  string officialDiscordUrl = 8;
+  string bugReportUrl = 9;
+}
+

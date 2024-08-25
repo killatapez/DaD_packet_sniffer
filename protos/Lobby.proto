@@ -1,0 +1,119 @@
+syntax = "proto3";
+
+package DC.Packet;
+
+option java_package = "com.packets.lobby";
+option java_outer_classname = "lobby";
+option java_multiple_files = false;
+
+import "_Character.proto";
+import "_Item.proto";
+
+message SC2S_CHARACTER_SELECT_ENTER_REQ {
+}
+
+message SS2C_CHARACTER_SELECT_ENTER_RES {
+  uint32 result = 1;
+}
+
+message SC2S_LOBBY_CHARACTER_INFO_REQ {
+}
+
+message SS2C_LOBBY_CHARACTER_INFO_RES {
+  uint32 result = 1;
+  .DC.Packet.SCHARACTER_INFO characterDataBase = 2;
+}
+
+message SC2S_OPEN_LOBBY_MAP_REQ {
+}
+
+message SS2C_OPEN_LOBBY_MAP_RES {
+}
+
+message SC2S_LOBBY_REGION_SELECT_REQ {
+  uint32 region = 1;
+}
+
+message SS2C_LOBBY_REGION_SELECT_RES {
+  uint32 result = 1;
+  uint32 region = 2;
+}
+
+message SC2S_LOBBY_ENTER_FROM_GAME_REQ {
+}
+
+message SS2C_LOBBY_ENTER_FROM_GAME_RES {
+  uint32 result = 1;
+}
+
+message SC2S_LOBBY_GAME_TYPE_SELECT_REQ {
+  uint32 gameTypeIndex = 1;
+}
+
+message SS2C_LOBBY_GAME_TYPE_SELECT_RES {
+  uint32 result = 1;
+  uint32 gameTypeIndex = 2;
+}
+
+message SACCOUNT_CURRENCY_INFO {
+  uint32 currencyType = 1;
+  uint32 currencyValue = 2;
+}
+
+message SS2C_LOBBY_ACCOUNT_CURRENCY_LIST_NOT {
+  repeated .DC.Packet.SACCOUNT_CURRENCY_INFO currencyInfos = 1;
+  string buyRedstoneShardUrl = 2;
+}
+
+message SS2C_LOBBY_CHARACTER_LOBBY_EMOTE_NOT {
+  repeated .DC.Packet.SCUSTOMIZE_LOBBY_EMOTE lobbyEmoteList = 1;
+}
+
+message SREPORT_PUNISH_INFO {
+  .DC.Packet.SACCOUNT_NICKNAME nickname = 1;
+  int32 reportBanType = 2;
+}
+
+message SS2C_LOBBY_REPORT_PUNISH_LIST_NOT {
+  enum REPORT_BAN_TYPE {
+    NONE_BAN_TYPE = 0;
+    PERMANENT_BAN = 1;
+    TEMPORARY_BAN = 2;
+  }
+
+  repeated .DC.Packet.SREPORT_PUNISH_INFO infos = 1;
+}
+
+message SC2S_USER_CHARACTER_GAME_STAT_INFO_REQ {
+  string seasonId = 1;
+  int32 gameType = 2;
+  string dungeonIdTag = 3;
+}
+
+message SS2C_USER_CHARACTER_GAME_STAT_INFO_RES {
+  string seasonId = 1;
+  int32 gameType = 2;
+  repeated .DC.Packet.SGameStat gameStats = 3;
+  string dungeonIdTag = 4;
+}
+
+message SC2S_KNIGHT_PROGRAM_LINK_SELECT_REQ {
+}
+
+message SS2C_KNIGHT_PROGRAM_LINK_SELECT_RES {
+  int32 result = 1;
+  string url = 2;
+}
+
+message SC2S_GM_TRADE_CHAT_BAN_REQ {
+  string accountId = 1;
+  string characterId = 2;
+  string nickName = 3;
+  string lastChatMsg = 4;
+  uint32 banType = 5;
+}
+
+message SS2C_GM_TRADE_CHAT_BAN_RES {
+  uint32 result = 1;
+}
+
